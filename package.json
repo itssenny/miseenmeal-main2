@@ -1,0 +1,1 @@
+{"name":"pantry-cooking-hub","private":true,"version":"1.0.0","scripts":{"dev":"ruby -run -e httpd . -p 4173","build":"ruby scripts/build.rb"}}

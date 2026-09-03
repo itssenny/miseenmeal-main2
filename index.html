@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f3e9" />
+  <meta name="description" content="Mise & Meal — recipes, meal planning, shopping and guided cooking in one warm kitchen workspace." />
+  <title>Mise & Meal — Your kitchen, in rhythm</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <section class="auth-view" id="auth-view" aria-labelledby="auth-title">
+    <div class="auth-card">
+      <a class="brand auth-brand" href="#" aria-label="Mise & Meal"><span class="brand-mark">M</span><span>Mise & Meal</span></a>
+      <p class="eyebrow">YOUR KITCHEN, IN RHYTHM</p>
+      <h1 id="auth-title">Welcome back.</h1>
+      <p class="auth-copy" id="auth-copy">Sign in to open your kitchen.</p>
+      <div class="auth-tabs" aria-label="Authentication mode">
+        <button class="active" type="button" data-auth-mode="signin">Sign in</button>
+        <button type="button" data-auth-mode="signup">Create account</button>
+      </div>
+      <form id="auth-form">
+        <label>Email<input name="email" type="email" autocomplete="email" required placeholder="you@example.com"></label>
+        <label>Password<input name="password" type="password" autocomplete="current-password" minlength="6" required placeholder="At least 6 characters"></label>
+        <button class="primary-btn auth-submit" id="auth-submit">Sign in</button>
+      </form>
+      <p class="auth-message" id="auth-message" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+  <div class="app-shell" id="app-shell" hidden>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Mise & Meal home"><span class="brand-mark">M</span><span>Mise & Meal</span></a>
+      <nav class="main-nav" aria-label="Primary">
+        <button class="nav-item active" data-view="home">Home</button>
+        <button class="nav-item" data-view="recipes">Recipes</button>
+        <button class="nav-item" data-view="planner">Meal plan</button>
+        <button class="nav-item" data-view="inventory">Inventory</button>
+        <button class="nav-item" data-view="shopping">Shopping</button>
+      </nav>
+      <div class="account-actions"><span id="account-email"></span><button class="avatar" id="profile-button" data-view="profile" aria-label="Open profile" title="Profile">MM</button></div>
+    </header>
+
+    <main id="app">
+      <section class="view active" id="home-view">
+        <div class="hero">
+          <div>
+            <p class="eyebrow">SATURDAY, AUGUST 22</p>
+            <h1>Good afternoon,<br><em>what's cooking?</em></h1>
+            <p class="hero-copy">Your kitchen is in good shape. You can make <strong>4 recipes</strong> with what you have.</p>
+            <button class="primary-btn" data-action="cook-now">See what I can cook <span>→</span></button>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="plate"><div class="pasta">〰<br>〰〰<br>〰</div><i class="leaf l1"></i><i class="leaf l2"></i><i class="tomato"></i></div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <section class="panel week-panel">
+            <div class="section-heading"><div><p class="eyebrow">THIS WEEK</p><h2>On the menu</h2></div><button class="text-btn" data-view="planner">View meal plan →</button></div>
+            <div class="meal-strip" id="home-meals"></div>
+          </section>
+          <section class="panel low-panel">
+            <div class="section-heading"><div><p class="eyebrow coral">MISE & MEAL CHECK</p><h2>Running low</h2></div><span class="count-pill" id="low-count">3</span></div>
+            <div id="low-stock-list"></div>
+            <button class="full-soft-btn" data-action="add-low">Add all to shopping list</button>
+          </section>
+        </div>
+
+        <section class="recipe-section">
+          <div class="section-heading"><div><p class="eyebrow">READY WHEN YOU ARE</p><h2>Cook with what you have</h2></div><button class="text-btn" data-view="recipes">Browse all recipes →</button></div>
+          <div class="recipe-grid" id="home-recipes"></div>
+        </section>
+      </section>
+      <section class="view" id="recipes-view"></section>
+      <section class="view" id="planner-view"></section>
+      <section class="view" id="inventory-view"></section>
+      <section class="view" id="shopping-view"></section>
+      <section class="view" id="profile-view"></section>
+      <section class="view" id="detail-view"></section>
+      <section class="view cooking-view" id="cooking-view"></section>
+    </main>
+  </div>
+  <div id="modal-root"></div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="supabase-config.local.js"></script>
+  <script type="module" src="app.js"></script>
+  <script type="module" src="profile.js"></script>
+  <script type="module" src="auth.js"></script>
+</body>
+</html>

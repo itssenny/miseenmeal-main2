@@ -1,0 +1,15 @@
+PRAGMA foreign_keys=ON;
+CREATE TABLE users(id TEXT PRIMARY KEY,display_name TEXT NOT NULL,created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE ingredient_categories(id INTEGER PRIMARY KEY,user_id TEXT,name TEXT NOT NULL,UNIQUE(user_id,name));
+CREATE TABLE storage_locations(id INTEGER PRIMARY KEY,user_id TEXT,name TEXT NOT NULL,UNIQUE(user_id,name));
+CREATE TABLE ingredients(id INTEGER PRIMARY KEY,canonical_name TEXT NOT NULL UNIQUE,category_id INTEGER REFERENCES ingredient_categories(id),aliases_json TEXT NOT NULL DEFAULT '[]');
+CREATE TABLE inventory_items(id INTEGER PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),ingredient_id INTEGER NOT NULL REFERENCES ingredients(id),quantity REAL,unit TEXT NOT NULL,low_stock_threshold REAL,storage_location_id INTEGER REFERENCES storage_locations(id),expires_on TEXT,notes TEXT,updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,UNIQUE(user_id,ingredient_id,storage_location_id));
+CREATE TABLE recipes(id INTEGER PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),name TEXT NOT NULL,image_url TEXT,cuisine TEXT,tags_json TEXT NOT NULL DEFAULT '[]',total_minutes INTEGER,prep_minutes INTEGER,cook_minutes INTEGER,difficulty TEXT,servings REAL NOT NULL,instructions_json TEXT NOT NULL,rating REAL,notes TEXT,source TEXT,source_url TEXT,added_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,last_cooked_at TEXT);
+CREATE TABLE recipe_ingredients(id INTEGER PRIMARY KEY,recipe_id INTEGER NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,ingredient_id INTEGER NOT NULL REFERENCES ingredients(id),quantity REAL NOT NULL,unit TEXT NOT NULL,preparation_note TEXT,sort_order INTEGER NOT NULL);
+CREATE TABLE meal_plan_entries(id INTEGER PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),recipe_id INTEGER NOT NULL REFERENCES recipes(id),planned_date TEXT NOT NULL,meal_slot TEXT NOT NULL,servings REAL NOT NULL);
+CREATE TABLE shopping_list_items(id INTEGER PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),ingredient_id INTEGER REFERENCES ingredients(id),label TEXT,quantity REAL,unit TEXT,checked INTEGER NOT NULL DEFAULT 0,origin TEXT NOT NULL,manually_edited INTEGER NOT NULL DEFAULT 0);
+CREATE TABLE shopping_item_sources(shopping_item_id INTEGER NOT NULL REFERENCES shopping_list_items(id) ON DELETE CASCADE,meal_plan_entry_id INTEGER REFERENCES meal_plan_entries(id) ON DELETE SET NULL,recipe_id INTEGER REFERENCES recipes(id) ON DELETE SET NULL);
+CREATE TABLE cooking_sessions(id INTEGER PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),recipe_id INTEGER NOT NULL REFERENCES recipes(id),servings REAL NOT NULL,started_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,completed_at TEXT,deductions_confirmed_at TEXT);
+CREATE INDEX idx_inventory_user_ingredient ON inventory_items(user_id,ingredient_id);
+CREATE INDEX idx_meal_plan_user_date ON meal_plan_entries(user_id,planned_date);
+CREATE INDEX idx_shopping_user_checked ON shopping_list_items(user_id,checked);

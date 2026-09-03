@@ -1,0 +1,7 @@
+.openai/
+
+# Local environment and browser configuration
+.env
+.env.*
+!.env.example
+supabase-config.local.js
